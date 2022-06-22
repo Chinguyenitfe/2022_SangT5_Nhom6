@@ -1,4 +1,4 @@
-package model;
+package view;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -66,12 +66,12 @@ public class Login extends JFrame {
 		contentPane.add(textField);
 		textField.setColumns(10);
 
-		JLabel lblNewLabel_1 = new JLabel("T\u00E0i kho\u1EA3n");
+		JLabel lblNewLabel_1 = new JLabel("Tài Khoản");
 		lblNewLabel_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		lblNewLabel_1.setBounds(479, 99, 74, 30);
 		contentPane.add(lblNewLabel_1);
 
-		JLabel lblNewLabel_1_1 = new JLabel("M\u1EADt kh\u1EA9u");
+		JLabel lblNewLabel_1_1 = new JLabel("Mật Khẩu");
 		lblNewLabel_1_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		lblNewLabel_1_1.setBounds(479, 157, 74, 30);
 		contentPane.add(lblNewLabel_1_1);

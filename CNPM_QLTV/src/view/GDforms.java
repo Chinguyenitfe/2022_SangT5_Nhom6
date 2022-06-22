@@ -1,4 +1,4 @@
-package model;
+package view;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -176,12 +176,10 @@ public class GDforms extends JFrame {
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		tabbedPane.addTab("S\u00E1ch", new ImageIcon(GDforms.class.getResource("/image/D.png")), panel, null);
+		tabbedPane.addTab("Sách", new ImageIcon(GDforms.class.getResource("/image/D.png")), panel, null);
 		panel.setLayout(null);
 
 		textField = new JTextField();
-		textField.addKeyListener(keyAction);
-
 		textField.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		textField.setBounds(282, 10, 340, 31);
 		panel.add(textField);
@@ -211,8 +209,8 @@ public class GDforms extends JFrame {
 			}
 		};
 		table.addMouseListener(mouseAction);
-		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Mã Sách",
-				"Tên Sách", "Tên tác giả", "Nhà xuất bản", "Số Lượng" }));
+		table.setModel(new DefaultTableModel(new Object[][] {},
+				new String[] { "Mã Sách", "Tên Sách", "Tên tác giả", "Nhà xuất bản", "Số Lượng" }));
 		table.getColumnModel().getColumn(0).setPreferredWidth(91);
 		table.getColumnModel().getColumn(1).setPreferredWidth(167);
 		table.getColumnModel().getColumn(2).setPreferredWidth(191);
@@ -418,6 +416,62 @@ public class GDforms extends JFrame {
 		lblNewLabel_11.setBounds(205, 10, 67, 31);
 		panel.add(lblNewLabel_11);
 
+		JButton btnNewButton = new JButton("Tìm Kiếm");
+		btnNewButton.setBounds(649, 15, 89, 23);
+		btnNewButton.setActionCommand("Find");
+		btnNewButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (e.getActionCommand().equals("Find")) {
+					Statement st = null;
+					ResultSet rs = null;
+					Connection conn = cn.getConnection();
+					String[] headers = { "Mã sách", "Tên sách", "Tên tác giả", "Nhà xuất bản", "Số lượng" };
+					DefaultTableModel tblModel = new DefaultTableModel(headers, 0);
+					try {
+						String sql = "SELECT * FROM SACH";
+						if (textField.getText() != null) {
+							sql = sql + " where Ten_Sach = " + "'" + textField.getText() + "'" + " OR "
+									+ "Ten_Tac_gia =" + "'" + textField.getText() + "'";
+
+						}
+
+						st = conn.createStatement();
+						rs = st.executeQuery(sql);
+
+						if (!rs.isBeforeFirst()) {
+							if(textField.getText().equals("") || textField.getText().equals(" ")) {
+								textField.setText("");
+								JOptionPane.showMessageDialog(null, "Tìm kiếm cái gì ???","Empty",JOptionPane.ERROR_MESSAGE);								
+							}else {
+								textField.setText("");
+								JOptionPane.showMessageDialog(null, "Không tìm thấy!!!!","NotFound!!!",JOptionPane.ERROR_MESSAGE);								
+							}
+							
+						}
+						
+						Vector data = null;
+						tblModel.setRowCount(0);
+						while (rs.next()) {
+							textField.setText("");
+							data = new Vector();
+							data.add(rs.getString("Ma_Sach"));
+							data.add(rs.getString("Ten_Sach"));
+							data.add(rs.getString("Ten_Tac_gia"));
+							data.add(rs.getString("Nha_xb"));
+							data.add(rs.getInt("So_luong"));
+							tblModel.addRow(data);
+						}
+						table.setModel(tblModel);
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+				}
+			}
+		});
+		panel.add(btnNewButton);
+
 //		Thêm,sửa,xoá độc giả: QUÂN
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -512,8 +566,8 @@ public class GDforms extends JFrame {
 		panel_1.add(scrollPane_2);
 
 		table_2 = new JTable();
-		table_2.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Mã độc giả",
-				"Tên đọc giả", "Số điện thoại", "Email" }));
+		table_2.setModel(new DefaultTableModel(new Object[][] {},
+				new String[] { "Mã độc giả", "Tên đọc giả", "Số điện thoại", "Email" }));
 		table_2.getColumnModel().getColumn(0).setPreferredWidth(91);
 		table_2.getColumnModel().getColumn(1).setPreferredWidth(172);
 		table_2.getColumnModel().getColumn(2).setPreferredWidth(176);
@@ -534,8 +588,7 @@ public class GDforms extends JFrame {
 //		thêm sửa xoá : NGÂN
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		tabbedPane.addTab("Phiếu mượn", new ImageIcon(GDforms.class.getResource("/image/E.png")),
-				panel_2, null);
+		tabbedPane.addTab("Phiếu mượn", new ImageIcon(GDforms.class.getResource("/image/E.png")), panel_2, null);
 		panel_2.setLayout(null);
 
 		textField_11 = new JTextField();
@@ -655,9 +708,7 @@ public class GDforms extends JFrame {
 			}
 		});
 		table_1.setModel(new DefaultTableModel(new Object[][] {},
-				new String[] { "Mã phiếu mượn", "Mã đọc giả",
-						"Mã sách", "Ngày mượn", "Ngày trả",
-						"Số lượng" }));
+				new String[] { "Mã phiếu mượn", "Mã đọc giả", "Mã sách", "Ngày mượn", "Ngày trả", "Số lượng" }));
 		table_1.getColumnModel().getColumn(0).setPreferredWidth(123);
 		scrollPane_1.setViewportView(table_1);
 
@@ -704,5 +755,4 @@ public class GDforms extends JFrame {
 			}
 		});
 	}
-
 }
