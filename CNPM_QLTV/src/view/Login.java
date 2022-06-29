@@ -20,7 +20,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import dao.Connect;
+import controller.Connect;
 
 public class Login extends JFrame {
 
